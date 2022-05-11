@@ -10,7 +10,7 @@ try {
 
     await mongoClient.connect();
     db = mongoClient.db(process.env.DATABASE);
-    console.log('Connected to database successfully');
+    console.log(`Connected to database ${process.env.DATABASE} successfully`);
 
 } catch (error) { console.log('Could not connect to MongoDB: ', error); }
 
