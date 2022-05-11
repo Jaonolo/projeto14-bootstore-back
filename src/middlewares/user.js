@@ -9,10 +9,10 @@ export async function UserValidator(req, res, next) {
 
     try {
 
-        const session = await db.collection("sessions").findOne({ token });
+        const session = await db.collection("bootstore_sessions").findOne({ token });
         if (!session) return res.status(401).send("No session found."); // unauthorized
 
-        const user = await db.collection("users").findOne({ _id: session.userId });
+        const user = await db.collection("bootstore_users").findOne({ _id: session.userId });
         if (!user) return res.status(401).send("No user found."); // unauthorized
 
         res.locals.user = user;
