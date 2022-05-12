@@ -13,3 +13,9 @@
 
 `bootstore_produtosVendidos.findOne..` 
 isso por que deu problema com o antigo projeto ( agora os dois utilizam o mesmo db e para nao dar conflito entre os documentos encontrei essa solucao/gambiarra ) o importante e que funciona e os dois projetos rodam hehehe.
+
+
+# Novo aviso:
+
+- Todas as novas rotas implementadas precisam ser exaustivamente testadas antes do merge
+- Ate o momento: 01:50 12/05/22 nao foram testadas
