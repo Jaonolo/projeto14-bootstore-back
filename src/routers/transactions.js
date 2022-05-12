@@ -1,13 +1,13 @@
 import { Router } from "express";
-import { UserValidator } from '../middlewares/user.js';
+import { UserValidator } from '../middlewares/userValidator.js';
 
-// import { aController, bController } from '../controllers/transactions.js';
-// import { aMiddleware, bMiddleware } from '../middlewares/transactions.js';
+import { ListCartController, AddCartController } from '../controllers/cart.js';
+import { AddCartMiddleware } from '../middlewares/cart.js';
 
 const transactionsRouter = Router();
 transactionsRouter.use(UserValidator);
 
-// transactionsRouter.post("/a", aMiddleware, aController);
-// transactionsRouter.post("/b", bMiddleware, bController);
+transactionsRouter.get("/cart", ListCartController);
+transactionsRouter.post("/cart", AddCartMiddleware, AddCartController);
 
 export default transactionsRouter;
