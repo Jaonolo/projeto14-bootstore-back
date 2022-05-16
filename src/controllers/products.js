@@ -33,6 +33,10 @@ export async function SetProductsController(req, res) {
             productQuantity,
             productStatus
         });
+        await db.collection("bootstore_mystore").insertOne({
+            product: newProductID,
+            user: res.locals.user._id
+        })
 
         res.status(201).send({ productID }); // created
 
@@ -45,7 +49,7 @@ export async function GetProductsController(req, res) {
 
         const products = await db.collection("bootstore_products").find({}).toArray();
 
-        products ? res.send(products) : res.send('No products found.');
+        res.send(products);
 
     } catch (err) { return res.status(500).send('Error accessing database during GetProductsController.'); }
 }

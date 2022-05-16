@@ -22,10 +22,14 @@ import {
 
 } from '../middlewares/products.js';
 
+import { UserValidator } from '../middlewares/userValidator.js';
+
 const productsRouter = Router();
 
+productsRouter.use(UserValidator);
+
 productsRouter.post("/setProducts", SetProductsMiddleware, SetProductsController);
-productsRouter.post("/getProducts", GetProductsMiddleware, GetProductsController);
+productsRouter.get("/getProducts", GetProductsMiddleware, GetProductsController);
 
 productsRouter.post("/editProducts", EditProductsMiddleware, EditProductsController);
 productsRouter.delete("/deleteProducts", DeleteProductsMiddleware, DeleteProductsController);
