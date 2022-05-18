@@ -3,7 +3,7 @@ import dotenv from 'dotenv';
 import cors from 'cors';
 
 const app = express();
-app.use(cors, express.json());
+app.use(cors(), express.json());
 
 import authorizationRouter from './routers/authorization.js';
 import transactionsRouter from './routers/transactions.js';

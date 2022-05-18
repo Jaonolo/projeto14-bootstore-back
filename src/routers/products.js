@@ -7,7 +7,7 @@ import {
     GetProductsByCategoryController, GetProductsByStatusController,
     GetProductsByNameController, GetProductsByPriceController,
     GetProductsByRangePriceController, GetProductsByQuantityController,
-    GenerateRandomProductsController
+    GenerateRandomProductsController, GetProductByIDController
 
 } from '../controllers/products.js';
 
@@ -30,6 +30,7 @@ productsRouter.use(UserValidator);
 
 productsRouter.post("/setProducts", SetProductsMiddleware, SetProductsController);
 productsRouter.get("/getProducts", GetProductsMiddleware, GetProductsController);
+productsRouter.get("/products/:productID", GetProductsMiddleware, GetProductByIDController);
 
 productsRouter.post("/editProducts", EditProductsMiddleware, EditProductsController);
 productsRouter.delete("/deleteProducts", DeleteProductsMiddleware, DeleteProductsController);

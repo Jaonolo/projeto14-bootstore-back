@@ -33,25 +33,48 @@ export async function SetProductsController(req, res) {
             productQuantity,
             productStatus
         });
-        await db.collection("bootstore_mystore").insertOne({
-            product: newProductID,
-            user: res.locals.user._id
-        })
 
-        res.status(201).send({ productID }); // created
+        const userId = res.locals.user._id
+        const myStore = await db.collection("bootstore_mystore").findOne({ user: userId })
 
-    } catch (err) { return res.status(500).send('Error accessing database during SetProductsController.'); }
+        if (!myStore) await db.collection("bootstore_mystore").insertOne({
+            user: userId,
+            storeList: [newProductID]
+        });
+        else {
+            await db.collection("bootstore_mystore").updateOne({ user: userId }, {
+                $set: { storeList: [...myStore.storeList, newProductID] }
+            });
+        }
+
+        res.status(201).send({ newProductID }); // created
+
+    } catch (err) { console.log(err); return res.status(500).send('Error accessing database during SetProductsController.'); }
 }
 
 export async function GetProductsController(req, res) {
 
     try {
 
-        const products = await db.collection("bootstore_products").find({}).toArray();
+        const products = await db.collection("bootstore_products").find({ productStatus: 'available' }).toArray();
 
         res.send(products);
 
     } catch (err) { return res.status(500).send('Error accessing database during GetProductsController.'); }
+}
+
+export async function GetProductByIDController(req, res) {
+
+    let { productID } = req.params;
+    productID = mongodb.ObjectId(productID)
+
+    try {
+        console.log(await db.collection("bootstore_products").findOne({ productID }))
+        const products = await db.collection("bootstore_products").findOne({ productID });
+
+        res.send(products);
+
+    } catch (err) { return res.status(500).send('Error accessing database during GetProductByIDController.'); }
 }
 
 export async function EditProductsController(req, res) {

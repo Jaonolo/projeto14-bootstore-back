@@ -1,4 +1,5 @@
 import db from '../database/database.js';
+import { ObjectId } from 'mongodb';
 
 export async function ListCartController(req, res) {
 
@@ -6,9 +7,14 @@ export async function ListCartController(req, res) {
 
         const userId = res.locals.user._id
 
-        const cart = await db.collection("bootstore_carts").findOne({ user: userId });
+        const cart = await db.collection("bootstore_carts").findOne({ user: ObjectId(userId) });
+        console.log(cart)
 
-        return cart ? res.send(cart.cartList) : res.send([])
+        return cart ? res.send(await Promise.all(
+            cart?.cartList.map(
+                async e => await db.collection("bootstore_products").findOne({ productID: ObjectId(e) })
+            )
+        )) : res.send([])
 
     } catch (err) { return res.status(500).send("Error accessing database while loading user's cart."); }
 }
@@ -26,13 +32,14 @@ export async function AddCartController(req, res) {
             cartList: [req.body.product]
         });
         else {
-            await db.collection("bootstore_products").updateOne({ productID: req.body.product }, {
-                $set: { productStatus: 'in cart' }
-            })
             await db.collection("bootstore_carts").updateOne({ user: userId }, {
                 $set: { cartList: [...cart.cartList, req.body.product] }
             });
         }
+
+        await db.collection("bootstore_products").updateOne({ productID: ObjectId(req.body.product) }, {
+            $set: { productStatus: 'in cart' }
+        })
 
         return res.sendStatus(200);
 

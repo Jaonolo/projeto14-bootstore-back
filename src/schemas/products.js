@@ -4,13 +4,13 @@ export const SetSchema = joi.object({
 
     // productID: joi.number().required(), sera gerado automaticamente pelo mongo
 
-    productName: joi.string().min(4).max(10).alphanum().required(),
+    productName: joi.string().min(4).alphanum().required(),
     productPrice: joi.number().required(),
     productDescription: joi.string().min(4).max(20).required(),
     
-    // productImage: joi.string().min(5).required(), ?
-    productCategory: joi.string().min(4).max(10).alphanum().required(),
-    productQuantity: joi.number().required(),
+    productImage: joi.array().items(joi.string().min(5).required()),
+    productCategory: joi.string().min(4).alphanum().required(),
+    productQuantity: joi.number(),
 
     // productStatus so pode ser: 'available' 'unavailable' ou 'in cart'
     productStatus: joi.string().valid('available', 'unavailable', 'in cart').required(),
